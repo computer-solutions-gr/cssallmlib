@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "cssallmlib"
-version = "0.1.4"
+version = "0.1.5"
 authors = [
     { name = "Stavros Pitoglou", email = "s.pitoglou@csl.gr" },
 ]
@@ -28,5 +28,5 @@ dev = [
     "pytest-cov>=6.0.0",
 ]
 [project.urls]
-"Homepage" = "https://github.com/yourusername/cssallmlib"
-"Bug Tracker" = "https://github.com/yourusername/cssallmlib/issues"
+"Homepage" = "https://github.com/computer-solutions-gr/cssallmlib"
+"Bug Tracker" = "https://github.com/computer-solutions-gr/cssallmlib/issues"
