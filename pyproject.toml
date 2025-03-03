@@ -5,11 +5,10 @@ build-backend = "hatchling.build"
 [project]
 name = "cssallmlib"
 version = "0.1.5"
-authors = [
-    { name = "Stavros Pitoglou", email = "s.pitoglou@csl.gr" },
-]
+authors = [{ name = "Stavros Pitoglou", email = "s.pitoglou@csl.gr" }]
 description = "A Python library providing helper utilities for LLM operations"
 readme = "README.md"
+keywords = ["llm", "ai", "machine-learning", "utilities"]
 requires-python = ">=3.10"
 dependencies = [
     "loguru>=0.7.0",
@@ -21,12 +20,11 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
+license = "MIT"
 
 [project.optional-dependencies]
-dev = [
-    "pytest>=8.0.0",
-    "pytest-cov>=6.0.0",
-]
+dev = ["pytest>=8.0.0", "pytest-cov>=6.0.0"]
+
 [project.urls]
 "Homepage" = "https://github.com/computer-solutions-gr/cssallmlib"
 "Bug Tracker" = "https://github.com/computer-solutions-gr/cssallmlib/issues"

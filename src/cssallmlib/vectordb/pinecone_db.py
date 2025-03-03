@@ -33,6 +33,12 @@ class PineconeManager(VectorDBManager):
                 (id, vec, metadata.get(id, {})) for id, vec in vectors
             ] if metadata else [(id, vec, {}) for id, vec in vectors]
             
+            # Ensure metadata contains all ids
+            if metadata:
+                for id, vec in vectors:
+                    if id not in metadata:
+                        metadata[id] = {}
+            
             self.index.upsert(vectors=vector_list)
             logger.info(f"Successfully upserted {len(vectors)} vectors")
         except Exception as e:
@@ -71,22 +77,48 @@ class PineconeManager(VectorDBManager):
             metadata (dict, optional): Dictionary mapping ids to metadata
         """
         try:
+            if not isinstance(sentences, list):
+                raise ValueError("sentences should be a list of strings")
+            
             # Create embeddings
             embeddings = self.model.encode(sentences)
+            
+            # Check if embeddings are valid
+            if not isinstance(embeddings, list) or not all(embeddings):
+                raise ValueError("embeddings should be a list of vectors")
             
             # Generate IDs if not provided
             if ids is None:
                 ids = [str(uuid.uuid4()) for _ in sentences]
             
+            # Check if IDs are valid
+            if not isinstance(ids, list) or not all(ids):
+                raise ValueError("ids should be a list of strings")
+            
             # Create vectors list
             vectors = list(zip(ids, embeddings))
+            
+            # Check if vectors are valid
+            if not isinstance(vectors, list) or not all(vectors):
+                raise ValueError("vectors should be a list of tuples")
             
             # Create metadata if not provided
             if metadata is None:
                 metadata = {id_: {'text': sent} for id_, sent in zip(ids, sentences)}
+            else:
+                # Check if metadata is valid
+                if not isinstance(metadata, dict) or not all(metadata):
+                    raise ValueError("metadata should be a dictionary")
+                
+                # Ensure metadata contains all ids
+                for id_ in ids:
+                    if id_ not in metadata:
+                        metadata[id_] = {}  # Initialize with empty dict if not present
+                # Update metadata to use generated IDs as keys
+                metadata = {id_: metadata.get(id_, {}) for id_ in ids}
             
             # Upsert vectors
-            self.upsert_vectors(vectors, metadata)
+            self.upsert_vectors(vectors=vectors, metadata=metadata)
             
             logger.info(f"Successfully embedded and upserted {len(sentences)} sentences")
             return ids
