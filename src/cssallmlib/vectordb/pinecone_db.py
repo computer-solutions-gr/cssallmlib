@@ -2,6 +2,7 @@ from loguru import logger
 import pinecone
 from .operations import VectorDBManager
 import uuid
+import numpy as np
 
 
 class PineconeManager(VectorDBManager):
@@ -17,8 +18,17 @@ class PineconeManager(VectorDBManager):
             index_name (str): Name of the Pinecone index to use
         """
         super().__init__()
-        pinecone.init(api_key=api_key, environment=environment)
-        self.index = pinecone.Index(index_name)
+        pc = pinecone.Pinecone(api_key=api_key, environment=environment)
+        try:
+            self.index = pc.create_index(
+                index_name,
+                spec=pinecone.ServerlessSpec(cloud="aws", region="us-east-1"),
+                dimension=384,
+                metric="cosine",
+            )
+        except Exception as e:
+            logger.error(f"Error creating Pinecone index: {str(e)}")
+        self.index = pc.Index(index_name)
         logger.info(f"Connected to Pinecone index: {index_name}")
 
     def upsert_vectors(self, vectors, metadata=None):
@@ -47,7 +57,7 @@ class PineconeManager(VectorDBManager):
             if not isinstance(id, str):
                 raise ValueError("id should be a string")
 
-            if not isinstance(vec, list):
+            if not isinstance(vec, list) and not isinstance(vec, np.ndarray):
                 raise ValueError("vector should be a list")
 
             if (metadata) and (id in metadata):
@@ -99,7 +109,7 @@ class PineconeManager(VectorDBManager):
             embeddings = self.model.encode(sentences)
 
             # Check if embeddings are valid
-            if not isinstance(embeddings, list) or not all(embeddings):
+            if not isinstance(embeddings, np.ndarray) or not embeddings.all():
                 raise ValueError("embeddings should be a list of vectors")
 
             # Generate IDs if not provided

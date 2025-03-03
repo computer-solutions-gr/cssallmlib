@@ -4,7 +4,7 @@ from cssallmlib.vectordb.pinecone_db import PineconeManager
 
 @pytest.fixture
 def mock_pinecone():
-    with patch('pinecone.init') as mock_init, patch('pinecone.Index') as mock_index:
+    with patch('pinecone.Pinecone') as mock_init, patch('pinecone.Index') as mock_index:
         mock_instance = mock_index.return_value
         yield {"init": mock_init, "index": mock_instance}
 

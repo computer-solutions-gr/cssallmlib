@@ -1,11 +1,12 @@
 import pytest
 from unittest.mock import patch
 from cssallmlib.vectordb.pinecone_db import PineconeManager
+import numpy as np
 
 
 @pytest.fixture
 def mock_pinecone():
-    with patch("pinecone.init") as mock_init, patch("pinecone.Index") as mock_index:
+    with patch("pinecone.Pinecone") as mock_init, patch("pinecone.Index") as mock_index:
         mock_instance = mock_index.return_value
         yield {"init": mock_init, "index": mock_instance}
 
@@ -14,7 +15,7 @@ def mock_pinecone():
 def mock_sentence_transformer():
     with patch("cssallmlib.vectordb.operations.SentenceTransformer") as mock_st:
         mock_instance = mock_st.return_value
-        mock_instance.encode.return_value = [[0.1, 0.2], [0.3, 0.4]]
+        mock_instance.encode.return_value = np.array([[0.1, 0.2], [0.3, 0.4]])
         yield mock_instance
 
 
