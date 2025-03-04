@@ -92,21 +92,21 @@ class PineconeManager(VectorDBManager):
             logger.error(f"Error searching vectors: {str(e)}")
             raise
 
-    def embed_and_upsert(self, sentences, ids=None, metadata=None):
+    def embed_and_upsert(self, documents, ids=None, metadata=None):
         """
         Create embeddings from sentences and upsert them
 
         Args:
-            sentences (list): List of sentences to embed
-            ids (list, optional): List of IDs for the sentences
-            metadata (list, optional): List of metadata dictionaries for each sentence
+            documents (list): List of documents to embed
+            ids (list, optional): List of IDs for the documents
+            metadata (list, optional): List of metadata dictionaries for each document
         """
         try:
-            if not isinstance(sentences, list):
-                raise ValueError("sentences should be a list of strings")
+            if not isinstance(documents, list):
+                raise ValueError("documents should be a list of strings")
 
             # Create embeddings
-            embeddings = self.model.encode(sentences)
+            embeddings = self.model.encode(documents)
 
             # Check if embeddings are valid
             if not isinstance(embeddings, np.ndarray) or not embeddings.all():
@@ -114,7 +114,7 @@ class PineconeManager(VectorDBManager):
 
             # Generate IDs if not provided
             if ids is None:
-                ids = [str(uuid.uuid4()) for _ in sentences]
+                ids = [str(uuid.uuid4()) for _ in documents]
 
             # Check if IDs are valid
             if not isinstance(ids, list) or not all(ids):
@@ -122,9 +122,9 @@ class PineconeManager(VectorDBManager):
 
             # Check if metadata is valid
             if metadata is not None:
-                if not isinstance(metadata, list) or len(metadata) != len(sentences):
+                if not isinstance(metadata, list) or len(metadata) != len(documents):
                     raise ValueError(
-                        "metadata should be a list of dictionaries with the same length as sentences"
+                        "metadata should be a list of dictionaries with the same length as documents"
                     )
                 for meta in metadata:
                     if not isinstance(meta, dict):

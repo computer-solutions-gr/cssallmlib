@@ -31,13 +31,13 @@ class VectorDBManager:
         """
         pass
 
-    def embed_and_upsert(self, sentences, ids=None, metadata=None):
+    def embed_and_upsert(self, documents, ids=None, metadata=None):
         """
-        Create embeddings from sentences and upsert them
+        Create embeddings from documents and upsert them
         
         Args:
-            sentences (list): List of sentences to embed
-            ids (list, optional): List of IDs for the sentences
+            documents (list): List of documents to embed
+            ids (list, optional): List of IDs for the documents
             metadata (dict, optional): Dictionary mapping ids to metadata
         """
         pass

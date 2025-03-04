@@ -4,16 +4,23 @@ from cssallmlib.vectordb.chroma_db import ChromaManager
 chroma_manager = ChromaManager()
 
 # %%
-chroma_manager.upsert_documents(
+# chroma_manager.upsert_documents(
+#     documents=[
+#         ("Hello, world!", {"source": "test"}),
+#         ("My name is John Doe", {"source": "test"}),
+#     ],
+# )
+chroma_manager.embed_and_upsert(
     documents=[
-        ("Hello, world!", {"source": "test"}),
-        ("My name is John Doe", {"source": "test"}),
+        "Hello, world!",
+        "My name is John Doe",
     ],
+    metadata=[{"source": "test"}, {"source": "test"}],
 )
 
 # %%
 chroma_manager.collection.get(
-    ids=["fafc7e8a-aa83-4f8f-853c-79ac3e2b9b7c"],
+    ids=["84603a7e-d4e1-4800-bf27-a7a8f26e9e84"],
     include=["embeddings", "documents", "metadatas"],
 )
 

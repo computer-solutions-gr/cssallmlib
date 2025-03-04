@@ -117,7 +117,7 @@ def test_embed_and_upsert_invalid_input(pinecone_manager):
     pinecone_manager.model.encode.return_value = np.array([[0.1, 0.2, 0.3]])
 
     # Test with non-list sentences
-    with pytest.raises(ValueError, match="sentences should be a list of strings"):
+    with pytest.raises(ValueError, match="documents should be a list of strings"):
         pinecone_manager.embed_and_upsert("not_a_list")
 
     # Test with invalid metadata length
