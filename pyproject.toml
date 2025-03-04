@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "cssallmlib"
-version = "0.1.5"
+version = "0.1.6"
 authors = [{ name = "Stavros Pitoglou", email = "s.pitoglou@csl.gr" }]
 description = "A Python library providing helper utilities for LLM operations"
 readme = "README.md"
@@ -14,6 +14,7 @@ dependencies = [
     "loguru>=0.7.0",
     "pinecone>=6.0.0",
     "sentence-transformers>=2.2.2",
+    "chromadb>=0.5.0",
 ]
 classifiers = [
     "Programming Language :: Python :: 3",
