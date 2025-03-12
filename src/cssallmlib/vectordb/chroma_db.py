@@ -8,8 +8,11 @@ from langchain_huggingface import HuggingFaceEmbeddings
 DEFAULT_PATH = "../chroma_db"
 DEFAULT_COLLECTION_NAME = "default"
 
+
 class ChromaManager(VectorDBManager):
-    def __init__(self, path: str = DEFAULT_PATH, collection_name: str = DEFAULT_COLLECTION_NAME) -> None:
+    def __init__(
+        self, path: str = DEFAULT_PATH, collection_name: str = DEFAULT_COLLECTION_NAME
+    ) -> None:
         """
         Initialize the ChromaManager with a specified path and collection name.
 
@@ -59,7 +62,9 @@ class ChromaManager(VectorDBManager):
         except Exception as e:
             logger.error(f"Failed to upsert documents: {e}")
 
-    def search_documents(self, query: str, k: int = 5, filter: dict = None, with_score: bool = False) -> list:
+    def search_documents(
+        self, query: str, k: int = 5, filter: dict = None, with_score: bool = False
+    ) -> list:
         """
         Search for documents in the vector store based on a query.
 
@@ -71,7 +76,9 @@ class ChromaManager(VectorDBManager):
         """
         try:
             if with_score:
-                return self.vector_store.similarity_search_with_score(query, k=k, filter=filter)
+                return self.vector_store.similarity_search_with_score(
+                    query, k=k, filter=filter
+                )
             else:
                 return self.vector_store.similarity_search(query, k=k, filter=filter)
         except Exception as e:
@@ -98,7 +105,7 @@ class ChromaManager(VectorDBManager):
         :return: The total number of documents.
         """
         try:
-            return len(self.vector_store.get()['ids'])
+            return len(self.vector_store.get()["ids"])
         except Exception as e:
             logger.error(f"Failed to count documents: {e}")
             return 0

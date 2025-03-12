@@ -1,6 +1,8 @@
 import pytest
 from cssallmlib.vectordb.chroma_db import ChromaManager
 from langchain_core.documents import Document
+import tempfile
+import shutil
 
 
 def import_documents(chroma_manager: ChromaManager):
@@ -81,11 +83,13 @@ def import_documents(chroma_manager: ChromaManager):
 
 @pytest.fixture(scope="module")
 def chroma_manager(request):
-    manager = ChromaManager(collection_name="test_collection")
+    temp_dir = tempfile.mkdtemp()
+    manager = ChromaManager(collection_name="test_collection", path=temp_dir)
     import_documents(manager)
 
     def teardown():
         manager.vector_store.reset_collection()
+        shutil.rmtree(temp_dir)
 
     request.addfinalizer(teardown)
 
