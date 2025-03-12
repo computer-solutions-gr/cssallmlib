@@ -12,9 +12,11 @@ keywords = ["llm", "ai", "machine-learning", "utilities"]
 requires-python = ">=3.10"
 dependencies = [
     "loguru>=0.7.0",
-    "pinecone>=6.0.0",
-    "sentence-transformers>=2.2.2",
+    # "pinecone>=6.0.0",
+    # "sentence-transformers>=2.2.2",
     "chromadb>=0.5.0",
+    "langchain-chroma>=0.1.2",
+    "langchain-huggingface>=0.1.2"
 ]
 classifiers = [
     "Programming Language :: Python :: 3",

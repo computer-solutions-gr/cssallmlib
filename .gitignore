@@ -59,4 +59,5 @@ local_settings.py
 
 # Chroma DB
 chroma_db/
+chroma/
 
