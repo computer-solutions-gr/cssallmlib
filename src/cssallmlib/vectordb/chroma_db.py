@@ -1,3 +1,4 @@
+import os
 import chromadb
 from .operations import VectorDBManager
 from loguru import logger
@@ -21,7 +22,7 @@ class ChromaManager(VectorDBManager):
         """
         super().__init__()
 
-        self.client = chromadb.PersistentClient()
+        self.client = chromadb.PersistentClient(path=path)
         self.collection = self.client.get_or_create_collection(collection_name)
         self.embedding_function = HuggingFaceEmbeddings(
             model_name=self.embedding_model,
@@ -33,6 +34,7 @@ class ChromaManager(VectorDBManager):
             embedding_function=self.embedding_function,
             persist_directory=path,
         )
+        logger.info(f"Chroma database initialized at {os.path.abspath(path)}")
 
     def _generate_ids(self, num_ids: int) -> list[str]:
         """

@@ -61,3 +61,8 @@ local_settings.py
 chroma_db/
 chroma/
 
+# Custom
+test1/
+experiment_db_*
+corpus
+
