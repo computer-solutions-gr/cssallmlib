@@ -1,3 +1,5 @@
+import time
+from loguru import logger
 import pytest
 from cssallmlib.vectordb.chroma_db import ChromaManager
 from langchain_core.documents import Document
@@ -88,11 +90,73 @@ def chroma_manager(request):
     import_documents(manager)
 
     def teardown():
-        manager.vector_store.reset_collection()
-        shutil.rmtree(temp_dir)
-
+        # First, reset the collection to ensure data is saved
+        try:
+            manager.vector_store.reset_collection()
+        except Exception as e:
+            logger.warning(f"Failed to reset collection: {e}")
+        
+        # Try multiple approaches to close the ChromaDB client
+        try:
+            # Try to clean up ChromaDB resources using different approaches
+            if hasattr(manager, 'client') and manager.client:
+                # Approach 1: Try to stop the system
+                try:
+                    if hasattr(manager.client, '_system'):
+                        manager.client._system.stop()
+                except Exception as e:
+                    logger.warning(f"Failed to stop ChromaDB system: {e}")
+                
+                # Approach 2: Try to close the client
+                try:
+                    if hasattr(manager.client, 'close'):
+                        manager.client.close()
+                except Exception as e:
+                    logger.warning(f"Failed to close ChromaDB client: {e}")
+                
+                # Approach 3: Try to clear system cache
+                try:
+                    import chromadb
+                    if hasattr(chromadb, 'clear_system_cache'):
+                        chromadb.clear_system_cache()
+                except Exception as e:
+                    logger.warning(f"Failed to clear ChromaDB system cache: {e}")
+            
+            # Explicitly set references to None to help garbage collection
+            if hasattr(manager, 'vector_store'):
+                manager.vector_store = None
+            if hasattr(manager, 'client'):
+                manager.client = None
+            if hasattr(manager, 'collection'):
+                manager.collection = None
+        except Exception as e:
+            logger.warning(f"Error during ChromaDB cleanup: {e}")
+        
+        # Wait longer before attempting to delete
+        time.sleep(2)
+        
+        # Try to remove the directory with retries and longer timeouts
+        for attempt in range(5):
+            try:
+                shutil.rmtree(temp_dir)
+                logger.info(f"Successfully removed temp directory: {temp_dir}")
+                break
+            except Exception as e:
+                logger.warning(f"Failed to remove temp directory (attempt {attempt+1}/5): {e}")
+                # Increase wait time with each attempt
+                time.sleep(2 * (attempt + 1))
+        else:
+            logger.error(f"Could not remove temp directory after 5 attempts: {temp_dir}")
+            # On Windows, sometimes we need to defer cleanup to a later time
+            try:
+                import atexit
+                atexit.register(lambda: shutil.rmtree(temp_dir, ignore_errors=True))
+                logger.info(f"Registered temp directory {temp_dir} for cleanup at exit")
+            except Exception as e:
+                logger.error(f"Failed to register directory for cleanup at exit: {e}")
+    
     request.addfinalizer(teardown)
-
+    
     return manager
 
 
@@ -138,4 +202,4 @@ def test_search_weather_documents(chroma_manager):
         "The stock market is down 500 points today due to fears of a recession."
         in search[1][0].page_content
     )
-    assert pytest.approx(search[0][1]) == 0.916557
+    assert search[0][1] == pytest.approx(0.916557)
