@@ -4,6 +4,9 @@ import uuid
 
 class VectorDBManager:
     """Base class for vector database operations"""
+    
+    # Class constant for the error message
+    NOT_IMPLEMENTED_MSG = "This method should be overridden by subclasses."
 
     def __init__(self):
         logger.info("Initializing VectorDB Manager")
@@ -24,7 +27,7 @@ class VectorDBManager:
 
         :param documents: A list of documents to be upserted.
         """
-        raise NotImplementedError("This method should be overridden by subclasses.")
+        raise NotImplementedError(self.NOT_IMPLEMENTED_MSG)
 
     def search_documents(
         self, query: str, k: int = 5, filter: dict = None, with_score: bool = False
@@ -38,15 +41,15 @@ class VectorDBManager:
         :param with_score: Whether to return the search results with similarity scores.
         :return: A list of search results, optionally with scores.
         """
-        raise NotImplementedError("This method should be overridden by subclasses.")
+        raise NotImplementedError(self.NOT_IMPLEMENTED_MSG)
 
-    def embed_and_upsert(self, sentences, ids=None, metadata=None):
+    def embed_and_upsert(self, documents, ids=None, metadata=None):
         """
-        Create embeddings from sentences and upsert them
+        Create embeddings from documents and upsert them
 
         Args:
-            sentences (list): List of sentences to embed
-            ids (list, optional): List of IDs for the sentences
+            documents (list): List of documents to embed
+            ids (list, optional): List of IDs for the documents
             metadata (dict, optional): Dictionary mapping ids to metadata
         """
         pass
@@ -58,7 +61,7 @@ class VectorDBManager:
         :param id: The ID of the document to retrieve.
         :return: The document corresponding to the given ID.
         """
-        raise NotImplementedError("This method should be overridden by subclasses.")
+        raise NotImplementedError(self.NOT_IMPLEMENTED_MSG)
 
     def count_documents(self) -> int:
         """
@@ -66,7 +69,7 @@ class VectorDBManager:
 
         :return: The total number of documents.
         """
-        raise NotImplementedError("This method should be overridden by subclasses.")
+        raise NotImplementedError(self.NOT_IMPLEMENTED_MSG)
 
     def get_all_documents(self) -> list[dict]:
         """
@@ -74,7 +77,7 @@ class VectorDBManager:
 
         :return: A list of all documents.
         """
-        raise NotImplementedError("This method should be overridden by subclasses.")
+        raise NotImplementedError(self.NOT_IMPLEMENTED_MSG)
 
     def list_collections(self) -> list[str]:
         """
@@ -82,4 +85,4 @@ class VectorDBManager:
 
         :return: A list of collection names.
         """
-        raise NotImplementedError("This method should be overridden by subclasses.")
+        raise NotImplementedError(self.NOT_IMPLEMENTED_MSG)
