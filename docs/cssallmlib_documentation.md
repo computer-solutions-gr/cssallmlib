@@ -1,11 +1,13 @@
 # CSSALLMLIB Module Documentation
 
 ## Overview
+
 The `cssallmlib` module provides utilities for vector database operations and core functionalities for LLM (Large Language Model) operations. It includes classes for managing vector databases and processing prompts for LLMs.
 
 ## Modules
 
 ### 1. `core.py`
+
 This module contains core functionalities for LLM operations.
 
 #### Classes
@@ -23,15 +25,16 @@ This module contains core functionalities for LLM operations.
       - **Returns**: Processed prompt ready for LLM input.
 
 ### 2. `vectordb` Package
+
 This package provides utilities for vector database manipulation.
 
-#### Modules
+#### Modules_
 
 - **`operations.py`**
   - **Classes**
     - **`VectorDBManager`**
       - **Description**: Base class for vector database operations.
-      
+
       - **Methods**:
         - `_generate_ids(num_ids: int) -> list[str]`
           - **Description**: Generates a list of unique IDs.
@@ -75,7 +78,7 @@ This package provides utilities for vector database manipulation.
   - **Classes**
     - **`ChromaManager`**
       - **Description**: Manages Chroma vector database operations.
-      
+
       - **Methods**:
         - `__init__(path: str = DEFAULT_PATH, collection_name: str = DEFAULT_COLLECTION_NAME) -> None`
           - **Description**: Initializes the ChromaManager with a specified path and collection name.
@@ -112,4 +115,4 @@ This package provides utilities for vector database manipulation.
           - **Returns**: A list of all documents.
         - `list_collections() -> list[str]`
           - **Description**: Lists all collections in the Chroma database.
-          - **Returns**: A list of collection names. 
+          - **Returns**: A list of collection names.
